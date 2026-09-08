@@ -1,6 +1,6 @@
 namespace open_auth_backend.Database.NTT;
 
-public class Device
+public class DeviceNTT
 {
     public int Id { get; set; }
 
@@ -12,8 +12,8 @@ public class Device
 
     public DateTime? DeletedAt { get; set; }
 
-    public User User { get; set; } = null!;
+    public UserNTT User { get; set; } = null!;
 
-    public ICollection<Session> Sessions { get; set; }
-        = new List<Session>();
+    public ICollection<SessionNTT> Sessions { get; set; }
+        = new List<SessionNTT>();
 }

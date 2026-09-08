@@ -1,11 +1,11 @@
 namespace open_auth_backend.Database.NTT;
 
-public class Domain
+public class DomainNTT
 {
     public int Id { get; set; }
 
     public string Name { get; set; } = null!;
 
-    public ICollection<UserDomain> UserDomains { get; set; }
-        = new List<UserDomain>();
+    public ICollection<UserDomainNTT> UserDomains { get; set; }
+        = new List<UserDomainNTT>();
 }

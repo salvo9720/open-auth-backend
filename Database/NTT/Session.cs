@@ -1,6 +1,6 @@
 namespace open_auth_backend.Database.NTT;
 
-public class Session
+public class SessionNTT
 {
     public int Id { get; set; }
 
@@ -18,7 +18,7 @@ public class Session
 
     public DateTime? RevokedAt { get; set; }
 
-    public User User { get; set; } = null!;
+    public UserNTT User { get; set; } = null!;
 
-    public Device Device { get; set; } = null!;
+    public DeviceNTT Device { get; set; } = null!;
 }
