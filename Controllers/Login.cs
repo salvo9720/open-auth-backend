@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using open_auth_backend.Controllers.Services;
+using open_auth_backend.DTO;
 using open_auth_backend.Database.NTT;
 
 namespace open_auth_backend.Controllers
@@ -18,7 +19,7 @@ namespace open_auth_backend.Controllers
 		}
 
 		[HttpPost("userAuth", Name = "userAuth")]
-		public async Task<IActionResult> userAuth([FromBody] UserNTT request)
+		public async Task<IActionResult> userAuth([FromBody] LoginRequestDTO request)
 		{
             bool valid = await _authService.ValidateCredentialsAsync(
 				request.Username,
@@ -30,9 +31,10 @@ namespace open_auth_backend.Controllers
             }
 
             return Ok(new
-            {
-                message = "Login effettuato"
-            });
+				{
+					message = "Login effettuato"
+				}
+			);
 
         }
 
