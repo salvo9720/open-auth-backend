@@ -13,8 +13,8 @@ public class AuthService
         _db = db;
     }
 
-    public async Task<UserNTT?> getUser(
-        string username,
+    public async Task<UserNTT?> getUserByEmailOrUsernameAndPassword(
+        string emailOrUsername,
         string password)
     {
         UserNTT? user = await _db.Users
@@ -24,7 +24,7 @@ public class AuthService
                 .ThenInclude(x => x.permission)
             .Include(x => x.devices)
             .Include(x => x.sessions)
-            .FirstOrDefaultAsync(x => x.username == username);
+            .FirstOrDefaultAsync(x => x.username == emailOrUsername || x.email == emailOrUsername);
 
         if (user is null)
         {
@@ -37,6 +37,23 @@ public class AuthService
 
 
         if (isSamepassword)
+        {
+            return user;
+        }
+
+        return null;
+    }
+
+    public async Task<UserNTT?> getUserByEmailOrUsername(
+     string emailOrUsername)
+    {
+        UserNTT? user = await _db.Users
+            .FirstOrDefaultAsync(x => x.username == emailOrUsername);
+
+        if (user is null)
+        {
+            return null;
+        } else if (user.username.Length > 0)
         {
             return user;
         }

@@ -36,6 +36,14 @@ public class AppDbContext : DbContext
             .HasIndex(x => x.username)
             .IsUnique();
 
+        modelBuilder.Entity<UserNTT>()
+            .HasIndex(x => x.email)
+            .IsUnique();
+
+        modelBuilder.Entity<UserNTT>()
+            .HasIndex(x => x.email)
+            .IsUnique();
+
         // Domain
         modelBuilder.Entity<DomainNTT>()
             .HasKey(x => x.id);

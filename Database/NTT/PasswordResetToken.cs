@@ -34,6 +34,22 @@ public class PasswordResetTokenNTT
         this.user = user;
     }
 
+    public PasswordResetTokenNTT(
+    int id,
+    int userId,
+    string tokenHash,
+    DateTime createdAt,
+    DateTime expiresAt,
+    DateTime? usedAt)
+    {
+        this.id = id;
+        this.userId = userId;
+        this.tokenHash = tokenHash;
+        this.createdAt = createdAt;
+        this.expiresAt = expiresAt;
+        this.usedAt = usedAt;
+    }
+
     public PasswordResetTokenNTT()
     {
     }
