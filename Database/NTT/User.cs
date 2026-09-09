@@ -2,22 +2,42 @@ namespace open_auth_backend.Database.NTT;
 
 public class UserNTT
 {
-    public int Id { get; set; }
+  
+    private int Id { get; set; }
 
-    public required string Username { get; set; };
+    private string Username { get; set; } = null!;
 
-    public required string PasswordHash { get; set; };
+    private string PasswordHash { get; set; } = null!;
 
-    public DateTime CreatedAt { get; set; }
+    private DateTime CreatedAt { get; set; }
 
-    public DateTime? DeletedAt { get; set; }
+    private DateTime? DeletedAt { get; set; }
 
-    public ICollection<UserDomainNTT> UserDomains { get; set; }
+    private ICollection<UserDomainNTT> UserDomains { get; set; }
         = new List<UserDomainNTT>();
 
-    public ICollection<DeviceNTT> Devices { get; set; }
+    private ICollection<DeviceNTT> Devices { get; set; }
         = new List<DeviceNTT>();
 
-    public ICollection<SessionNTT> Sessions { get; set; }
+    private ICollection<SessionNTT> Sessions { get; set; }
         = new List<SessionNTT>();
+
+    public UserNTT(int id, string username, string passwordHash, DateTime createdAt, DateTime? deletedAt, ICollection<UserDomainNTT> userDomains, ICollection<DeviceNTT> devices, ICollection<SessionNTT> sessions)
+    {
+        Id = id;
+        Username = username;
+        PasswordHash = passwordHash;
+        CreatedAt = createdAt;
+        DeletedAt = deletedAt;
+        UserDomains = userDomains;
+        Devices = devices;
+        Sessions = sessions;
+    }
+
+    public UserNTT()
+    { 
+      
+    }
+
+
 }
