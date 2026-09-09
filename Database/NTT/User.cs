@@ -8,6 +8,7 @@ public class UserNTT
     public int id { get; set; }
 
     public string username { get; private set; } = null!;
+    public string email { get; private set; } = null!;
 
     [JsonIgnore]
     public string passwordHash { get; private set; } = null!;

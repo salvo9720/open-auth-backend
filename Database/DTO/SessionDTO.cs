@@ -22,12 +22,23 @@ public class SessionDTO
 
     public SessionDTO(int id, int userId, int deviceId, DateTime createdAt, DateTime lastActivityAt, DateTime expiresAt, DateTime? revokedAt)
     {
-        this.id = id;
+     	this.id = id;
         this.userId = userId;
         this.deviceId = deviceId;
         this.createdAt = createdAt;
         this.lastActivityAt = lastActivityAt;
         this.expiresAt = expiresAt;
         this.revokedAt = revokedAt;
+    }
+
+    public SessionDTO(SessionNTT sessionNTT)
+    {
+        id = sessionNTT.id;
+        userId = sessionNTT.userId;
+        deviceId = sessionNTT.deviceId;
+        createdAt = sessionNTT.createdAt;
+        lastActivityAt = sessionNTT.lastActivityAt;
+        expiresAt = sessionNTT.expiresAt;
+        revokedAt = sessionNTT.revokedAt;
     }
 }

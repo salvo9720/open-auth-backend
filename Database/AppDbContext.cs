@@ -22,6 +22,8 @@ public class AppDbContext : DbContext
 
     public DbSet<SessionNTT> Sessions => Set<SessionNTT>();
 
+    public DbSet<PasswordResetTokenNTT> PasswordResetTokens => Set<PasswordResetTokenNTT>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -55,45 +57,45 @@ public class AppDbContext : DbContext
             });
 
         modelBuilder.Entity<UserDomainNTT>()
-            .HasOne(x => x.User)
-            .WithMany(x => x.UserDomains)
-            .HasForeignKey(x => x.UserId);
+            .HasOne(x => x.user)
+            .WithMany(x => x.userDomains)
+            .HasForeignKey(x => x.userId);
 
         modelBuilder.Entity<UserDomainNTT>()
-            .HasOne(x => x.Domain)
-            .WithMany(x => x.UserDomains)
-            .HasForeignKey(x => x.DomainId);
+            .HasOne(x => x.domain)
+            .WithMany(x => x.userDomains)
+            .HasForeignKey(x => x.domainId);
 
         modelBuilder.Entity<UserDomainNTT>()
-            .HasOne(x => x.Permission)
-            .WithMany(x => x.UserDomains)
-            .HasForeignKey(x => x.PermissionId);
+            .HasOne(x => x.permission)
+            .WithMany(x => x.userDomains)
+            .HasForeignKey(x => x.permissionId);
 
         // Device
         modelBuilder.Entity<DeviceNTT>()
-            .HasKey(x => x.Id);
+            .HasKey(x => x.id);
 
         modelBuilder.Entity<DeviceNTT>()
-            .HasOne(x => x.User)
-            .WithMany(x => x.Devices)
-            .HasForeignKey(x => x.UserId);
+            .HasOne(x => x.user)
+            .WithMany(x => x.devices)
+            .HasForeignKey(x => x.userId);
 
         // Session
         modelBuilder.Entity<SessionNTT>()
-            .HasKey(x => x.Id);
+            .HasKey(x => x.id);
 
         modelBuilder.Entity<SessionNTT>()
-            .HasOne(x => x.User)
-            .WithMany(x => x.Sessions)
-            .HasForeignKey(x => x.UserId);
+            .HasOne(x => x.user)
+            .WithMany(x => x.sessions)
+            .HasForeignKey(x => x.userId);
 
         modelBuilder.Entity<SessionNTT>()
-            .HasOne(x => x.Device)
-            .WithMany(x => x.Sessions)
-            .HasForeignKey(x => x.DeviceId);
+            .HasOne(x => x.device)
+            .WithMany(x => x.sessions)
+            .HasForeignKey(x => x.deviceId);
 
         modelBuilder.Entity<SessionNTT>()
-            .HasIndex(x => x.TokenHash)
+            .HasIndex(x => x.tokenHash)
             .IsUnique();
     }
 }
