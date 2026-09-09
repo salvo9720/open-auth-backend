@@ -18,13 +18,13 @@ public class AuthService
         string password)
     {
         UserNTT? user = await _db.Users
-            .Include(x => x.UserDomains)
-                .ThenInclude(x => x.Domain)
-            .Include(x => x.UserDomains)
-                .ThenInclude(x => x.Permission)
-            .Include(x => x.Devices)
-            .Include(x => x.Sessions)
-            .FirstOrDefaultAsync(x => x.Username == username);
+            .Include(x => x.userDomains)
+                .ThenInclude(x => x.domain)
+            .Include(x => x.userDomains)
+                .ThenInclude(x => x.permission)
+            .Include(x => x.devices)
+            .Include(x => x.sessions)
+            .FirstOrDefaultAsync(x => x.username == username);
 
         if (user is null)
         {
@@ -33,7 +33,7 @@ public class AuthService
 
         bool isSamepassword = BCrypt.Net.BCrypt.Verify(
             password,
-            user.PasswordHash);
+            user.passwordHash);
 
 
         if (isSamepassword)

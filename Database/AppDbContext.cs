@@ -28,30 +28,30 @@ public class AppDbContext : DbContext
 
         // User
         modelBuilder.Entity<UserNTT>()
-            .HasKey(x => x.Id);
+            .HasKey(x => x.id);
 
         modelBuilder.Entity<UserNTT>()
-            .HasIndex(x => x.Username)
+            .HasIndex(x => x.username)
             .IsUnique();
 
         // Domain
         modelBuilder.Entity<DomainNTT>()
-            .HasKey(x => x.Id);
+            .HasKey(x => x.id);
 
         modelBuilder.Entity<DomainNTT>()
-            .HasIndex(x => x.Name)
+            .HasIndex(x => x.name)
             .IsUnique();
 
         // Permission
         modelBuilder.Entity<PermissionNTT>()
-            .HasKey(x => x.Id);
+            .HasKey(x => x.id);
 
         // UserDomain
         modelBuilder.Entity<UserDomainNTT>()
             .HasKey(x => new
             {
-                x.UserId,
-                x.DomainId
+                x.userId,
+                x.domainId
             });
 
         modelBuilder.Entity<UserDomainNTT>()

@@ -1,17 +1,12 @@
-using System.Text.Json.Serialization;
-
 namespace open_auth_backend.Database.NTT;
 
-public class SessionNTT
+public class SessionDTO
 {
     public int id { get; private set; }
 
     public int userId { get; private set; }
 
     public int deviceId { get; private set; }
-
-    [JsonIgnore]
-    public string tokenHash { get; private set; } = null!;
 
     public DateTime createdAt { get; private set; }
 
@@ -24,4 +19,15 @@ public class SessionNTT
     public UserNTT user { get; private set; } = null!;
 
     public DeviceNTT device { get; private set; } = null!;
+
+    public SessionDTO(int id, int userId, int deviceId, DateTime createdAt, DateTime lastActivityAt, DateTime expiresAt, DateTime? revokedAt)
+    {
+        this.id = id;
+        this.userId = userId;
+        this.deviceId = deviceId;
+        this.createdAt = createdAt;
+        this.lastActivityAt = lastActivityAt;
+        this.expiresAt = expiresAt;
+        this.revokedAt = revokedAt;
+    }
 }

@@ -1,16 +1,15 @@
+using Microsoft.AspNetCore.Http.HttpResults;
+using open_auth_backend.Database.NTT;
 using System.Text.Json.Serialization;
 
-namespace open_auth_backend.Database.NTT;
+namespace open_auth_backend.Database.DTO;
 
-public class UserNTT
+public class UserDTO
 {
   
     public int id { get; set; }
 
     public string username { get; private set; } = null!;
-
-    [JsonIgnore]
-    public string passwordHash { get; private set; } = null!;
 
     public DateTime createdAt { get; private set; }
 
@@ -25,11 +24,10 @@ public class UserNTT
     public ICollection<SessionNTT> sessions { get; private set; }
         = new List<SessionNTT>();
 
-    public UserNTT(int id, string username, string passwordHash, DateTime createdAt, DateTime? deletedAt, ICollection<UserDomainNTT> userDomains, ICollection<DeviceNTT> devices, ICollection<SessionNTT> sessions)
+    public UserDTO(int id, string username, DateTime createdAt, DateTime? deletedAt, ICollection<UserDomainNTT> userDomains, ICollection<DeviceNTT> devices, ICollection<SessionNTT> sessions)
     {
         this.id = id;
         this.username = username;
-        this.passwordHash = passwordHash;
         this.createdAt = createdAt;
         this.deletedAt = deletedAt;
         this.userDomains = userDomains;
@@ -37,9 +35,15 @@ public class UserNTT
         this.sessions = sessions;
     }
 
-    public UserNTT()
-    { 
-      
+    public UserDTO(UserNTT userNtt)
+    {
+        id = userNtt.id;
+        username = userNtt.username;
+        createdAt = userNtt.createdAt;
+        deletedAt = userNtt.deletedAt;
+        userDomains = userNtt.userDomains;
+        devices = userNtt.devices;
+        sessions = userNtt.sessions;
     }
 
 

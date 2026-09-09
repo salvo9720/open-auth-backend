@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using open_auth_backend.Controllers.Services;
 using open_auth_backend.DTO;
 using open_auth_backend.Database.NTT;
+using open_auth_backend.Database.DTO;
+using open_auth_backend.Database.Mapper;
 
 namespace open_auth_backend.Controllers
 {
@@ -12,11 +14,13 @@ namespace open_auth_backend.Controllers
 	{
 		private readonly ILogger<LoginController> _logger;
 		private readonly AuthService _authService;
+		private readonly UserMapper _userMapper;
 
-        public LoginController(ILogger<LoginController> logger, AuthService authService)
+        public LoginController(ILogger<LoginController> logger, AuthService authService,UserMapper userMapper)
 		{
 			_logger = logger;
 			_authService = authService;
+			_userMapper = userMapper;
         }
 
 		[HttpPost("login", Name = "login")]
@@ -31,6 +35,7 @@ namespace open_auth_backend.Controllers
                 return Unauthorized();
             }
 
+			LoginResponseDTO loginResponseDto = _userMapper.fromUserNttToLoginResponseDto(loginResponse);
             return Ok(loginResponse);
 
         }
