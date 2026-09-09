@@ -1,25 +1,28 @@
+using System.Text.Json.Serialization;
+
 namespace open_auth_backend.Database.NTT;
 
 public class UserNTT
 {
   
-    private int Id { get; set; }
+    public int Id { get; set; }
 
-    private string Username { get; set; } = null!;
+    public string Username { get; private set; } = null!;
 
-    private string PasswordHash { get; set; } = null!;
+    [JsonIgnore]
+    public string PasswordHash { get; private set; } = null!;
 
-    private DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; private set; }
 
-    private DateTime? DeletedAt { get; set; }
+    public DateTime? DeletedAt { get; private set; }
 
-    private ICollection<UserDomainNTT> UserDomains { get; set; }
+    public ICollection<UserDomainNTT> UserDomains { get; private set; }
         = new List<UserDomainNTT>();
 
-    private ICollection<DeviceNTT> Devices { get; set; }
+    public ICollection<DeviceNTT> Devices { get; private set; }
         = new List<DeviceNTT>();
 
-    private ICollection<SessionNTT> Sessions { get; set; }
+    public ICollection<SessionNTT> Sessions { get; private set; }
         = new List<SessionNTT>();
 
     public UserNTT(int id, string username, string passwordHash, DateTime createdAt, DateTime? deletedAt, ICollection<UserDomainNTT> userDomains, ICollection<DeviceNTT> devices, ICollection<SessionNTT> sessions)

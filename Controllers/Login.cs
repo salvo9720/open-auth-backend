@@ -13,32 +13,25 @@ namespace open_auth_backend.Controllers
 		private readonly ILogger<LoginController> _logger;
 		private readonly AuthService _authService;
 
-        public LoginController()
-        {
-        }
-
-        public LoginController(ILogger<LoginController> logger)
+        public LoginController(ILogger<LoginController> logger, AuthService authService)
 		{
 			_logger = logger;
-		}
+			_authService = authService;
+        }
 
 		[HttpPost("login", Name = "login")]
 		public async Task<IActionResult> userAuth([FromBody] LoginRequestDTO request)
 		{
-            bool valid = await _authService.ValidateCredentialsAsync(
+            UserNTT? loginResponse = await _authService.getUser(
 				request.Username,
 				request.Password);
 
-            if (!valid)
+            if (loginResponse is null)
             {
                 return Unauthorized();
             }
 
-            return Ok(new
-				{
-					message = "Login effettuato"
-				}
-			);
+            return Ok(loginResponse);
 
         }
 

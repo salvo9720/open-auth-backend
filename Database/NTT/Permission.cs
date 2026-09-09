@@ -3,10 +3,10 @@ namespace open_auth_backend.Database.NTT;
 public class PermissionNTT
 
 {
-    private int Id { get; set; }
+    public int Id { get; private set; }
 
-    private int Level { get; set; }
+    public int Level { get; private set; }
 
-    private ICollection<UserDomainNTT> UserDomains { get; set; }
+    public ICollection<UserDomainNTT> UserDomains { get; private set; }
         = new List<UserDomainNTT>();
 }

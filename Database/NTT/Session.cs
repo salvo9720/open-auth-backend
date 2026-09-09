@@ -2,23 +2,23 @@ namespace open_auth_backend.Database.NTT;
 
 public class SessionNTT
 {
-    private int Id { get; set; }
+    public int Id { get; private set; }
 
-    private int UserId { get; set; }
+    public int UserId { get; private set; }
 
-    private int DeviceId { get; set; }
+    public int DeviceId { get; private set; }
 
-    private string TokenHash { get; set; } = null!;
+    public string TokenHash { get; private set; } = null!;
 
-    private DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; private set; }
 
-    private DateTime LastActivityAt { get; set; }
+    public DateTime LastActivityAt { get; private set; }
 
-    private DateTime ExpiresAt { get; set; }
+    public DateTime ExpiresAt { get; set; }
 
-    private DateTime? RevokedAt { get; set; }
+    public DateTime? RevokedAt { get; private set; }
 
-    private UserNTT User { get; set; } = null!;
+    public UserNTT User { get; private set; } = null!;
 
-    private DeviceNTT Device { get; set; } = null!;
+    public DeviceNTT Device { get; private set; } = null!;
 }

@@ -2,15 +2,15 @@ namespace open_auth_backend.Database.NTT;
 
 public class UserDomainNTT
 {
-    private int UserId { get; set; }
+    public int UserId { get; private set; }
 
-    private int DomainId { get; set; }
+    public int DomainId { get; private set; }
 
-    private int PermissionId { get; set; }
+    public int PermissionId { get; private set; }
 
-    private UserNTT User { get; set; } = null!;
+    public UserNTT User { get; private set; } = null!;
 
-    private DomainNTT Domain { get; set; } = null!;
+    public DomainNTT Domain { get; private set; } = null!;
 
-    private PermissionNTT Permission { get; set; } = null!;
+    public PermissionNTT Permission { get; private set; } = null!;
 }

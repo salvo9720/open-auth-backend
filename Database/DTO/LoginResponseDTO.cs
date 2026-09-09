@@ -6,15 +6,11 @@ public class LoginResponseDTO
 {
     public string Username { get; set; } = null!;
 
-    public string Password { get; set; } = null!;
+    public DeviceNTT Device { get; set; } =  null!;
 
-    public DeviceNTT Device { get; set; } = new DeviceNTT();
+    public int Permission { get; set; }
 
-    public DomainNTT Domain { get; set; } = new DomainNTT();
+    public SessionNTT Session { get; set; } =  null!;
 
-    public PermissionNTT Permission { get; set; } = new PermissionNTT();
-
-    public SessionNTT Session { get; set; } = new SessionNTT();
-
-    public UserDomainNTT UserDomain { get; set; } = new UserDomainNTT();
+    public List<string> UserDomain { get; set; } =  null!;
 }
