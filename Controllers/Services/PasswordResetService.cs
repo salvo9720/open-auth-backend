@@ -4,6 +4,7 @@ using open_auth_backend.Database.AppDbContext;
 using open_auth_backend.Database.DTO;
 using open_auth_backend.Database.NTT;
 using System.Security.Cryptography;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 namespace open_auth_backend.Controllers.Services;
 
 
@@ -47,7 +48,7 @@ public class PasswordResetService
 
     }
 
-    public async Task<UserDTO?> getUserByCode(string code)
+    public async Task<UserNTT?> getUserByCode(string code)
     {
         string tokenHash = BCrypt.Net.BCrypt.HashPassword(code);
 
@@ -60,24 +61,47 @@ public class PasswordResetService
             return null;
         }
 
-        return new UserDTO(passwordResetTokenNTT.user);
+        UserNTT? userNtt = await this._db.Users
+             .FirstOrDefaultAsync(x => x.id == passwordResetTokenNTT.user.id);
+
+        if (userNtt is null)
+        {
+            return null;
+        }
+
+
+        return userNtt;
     }
-    // wipe incompelte development 
-    public async Task<UserDTO?> updateUserpassword(string code, )
+
+    public async Task<PasswordResetTokenNTT?> validateCodeIsNotExpired(string code)
     {
         string tokenHash = BCrypt.Net.BCrypt.HashPassword(code);
 
         PasswordResetTokenNTT? passwordResetTokenNTT = await this._db.PasswordResetTokens
-            .Include(x => x.user)
-            .FirstOrDefaultAsync(x => x.tokenHash == tokenHash);
+            .FirstOrDefaultAsync(x => x.expiresAt < DateTime.UtcNow);
 
         if (passwordResetTokenNTT is null)
         {
             return null;
         }
 
-        return new UserDTO(passwordResetTokenNTT.user);
+        return passwordResetTokenNTT;
     }
+
+    public async Task<UserNTT?> changeUserPasswordHash(string code, UserNTT userNtt)
+    {
+
+        string tokenHash = BCrypt.Net.BCrypt.HashPassword(code);
+        userNtt.changePassword(tokenHash);
+        await this._db.SaveChangesAsync();
+
+        UserNTT? updatedUser = await this._db.Users
+            .FirstOrDefaultAsync(x => x.id == userNtt.id);
+
+        return updatedUser;
+    }
+
+
 
 
 

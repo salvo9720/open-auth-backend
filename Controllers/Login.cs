@@ -18,11 +18,12 @@ namespace open_auth_backend.Controllers
 		private readonly UserMapper _userMapper;
 		private readonly PasswordResetService _passwordResetService;
 
-        public LoginController(ILogger<LoginController> logger, AuthService authService,UserMapper userMapper)
+        public LoginController(ILogger<LoginController> logger, AuthService authService,UserMapper userMapper, PasswordResetService passwordResetService)
 		{
 			_logger = logger;
 			_authService = authService;
 			_userMapper = userMapper;
+            _passwordResetService = passwordResetService;
         }
 
 		[HttpPost("login", Name = "login")]
@@ -43,48 +44,58 @@ namespace open_auth_backend.Controllers
         }
 
 		[HttpPost("forgotPassword", Name = "forgotPassword")]
-		public async Task<IActionResult> forgotPassword([FromBody] string emailOrUsername)
+		public async Task<IActionResult> forgotPasswordAndSendEmail([FromBody] string emailOrUsername)
 		{
             UserNTT? userData = await _authService.getUserByEmailOrUsername(emailOrUsername);
 			if (userData is null)
 			{
                 _logger.LogError("emailOrUsername: {EmailOrUsername}", emailOrUsername);
+                return NotFound("utente non trovato");
                 
 			}
             Boolean resultResetEmail = await _passwordResetService.getUserByEmailOrUsername(userData);
 
-
-            // come viene gestito questo in un ambiemnte serio
-            // 1) inserisci la mail di registrazione 
-            // 2) inseirisci il codice ricevuto via email per confermare sia tu
-            // 3) modifica della password con la nuova password
             return Ok("segui i passaggi che ti sono stati inviati nell'indirizzo email");
         }
 
         [HttpPost("forgotPasswordVerifyCode", Name = "forgotPasswordVerifyCode")]
-        public async Task<IActionResult> forgotPassword([FromBody] string code)
+        public async Task<IActionResult> forgotPasswordVerifyCodeAndChangePassword([FromBody] string code, string password)
         {
 
-            UserNTT? userData = await _authService.getUserByEmailOrUsername(emailOrUsername);
-            if (userData is null)
+            UserNTT? userNtt = await _passwordResetService.getUserByCode(code);
+            if (userNtt is null)
             {
-                _logger.LogError("emailOrUsername: {EmailOrUsername}", emailOrUsername);
-
+                _logger.LogError("utente non trovato con code: {code}", code);
+                return NotFound("utente non trovato");
             }
-            Boolean resultResetEmail = await _passwordResetService.getUserByEmailOrUsername(userData);
+            Boolean resultResetEmail = await _passwordResetService.getUserByEmailOrUsername(userNtt);
 
+            if (resultResetEmail is false)
+            {
+                _logger.LogError("utente per update non trovato con code: {code}", code);
+                return NotFound("utente per update non trovato");
+            }
 
-            // come viene gestito questo in un ambiemnte serio
-            // 1) inserisci la mail di registrazione 
-            // 2) inseirisci il codice ricevuto via email per confermare sia tu
-            // 3) modifica della password con la nuova password
-            return Ok("segui i passaggi che ti sono stati inviati nell'indirizzo email");
+            UserNTT? updatedUserNtt = await _passwordResetService.changeUserPasswordHash(code,userNtt);
+
+            if (updatedUserNtt is null)
+            {
+                _logger.LogError("utente per update non trovato con code: {code}", code);
+                return NotFound("utente per update non trovato");
+            }
+
+            if (updatedUserNtt.passwordHash != userNtt.passwordHash)
+            {
+                return Ok("modifica passowrd avvenuta con successo");
+            }
+
+            throw new Exception("Si è verificato un errore nell'aggioranemnto ");
         }
 
         [HttpGet(Name = "DefaultLogin")]
 		public string GetDefault()
 		{
-			return "rispsota da default del controller, verifica il path di chiamata";
+			return "risposta da default del controller, verifica il path di chiamata";
 		}
 	}
 }

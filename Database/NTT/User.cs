@@ -43,5 +43,10 @@ public class UserNTT
       
     }
 
+    public void changePassword(string passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+
 
 }
