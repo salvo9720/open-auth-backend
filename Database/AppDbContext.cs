@@ -84,9 +84,9 @@ public class AppDbContext : DbContext
             .HasKey(x => x.id);
 
         modelBuilder.Entity<DeviceNTT>()
-            .HasOne(x => x.user)
+            .HasMany(x => x.user)
             .WithMany(x => x.devices)
-            .HasForeignKey(x => x.userId);
+            .UsingEntity(x => x.ToTable("user_devices"));
 
         // Session
         modelBuilder.Entity<SessionNTT>()

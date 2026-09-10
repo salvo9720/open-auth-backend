@@ -29,17 +29,28 @@ namespace open_auth_backend.Controllers
 		[HttpPost("login", Name = "login")]
 		public async Task<IActionResult> userAuth([FromBody] LoginRequestDTO request)
 		{
-            UserNTT? loginResponse = await _authService.getUserByEmailOrUsernameAndPassword(
+            UserNTT? userNtt = await _authService.getUserByEmailOrUsernameAndPassword(
 				request.Username,
 				request.Password);
 
-            if (loginResponse is null)
+            if (userNtt is null)
             {
                 return Unauthorized();
             }
 
-			LoginResponseDTO loginResponseDto = _userMapper.fromUserNttToLoginResponseDto(loginResponse);
-            return Ok(loginResponse);
+            string? userAgent = HttpContext.Request.Headers["User-Agent"].FirstOrDefault();
+
+            if (userAgent is null)
+            {
+                return BadRequest("userAgent missing");
+            }
+
+            DeviceNTT deviceNtt = await _authService.saveDevice(userAgent, userNtt.id);
+            SessionNTT sessionNtt = await _authService.saveSession(userNtt.id, deviceNtt.id, userAgent);
+
+            LoginResponseDTO loginResponseDto = _userMapper.fromUserNttToLoginResponseDto(userNtt);
+
+            return Ok(loginResponseDto);
 
         }
 

@@ -24,4 +24,15 @@ public class SessionNTT
     public UserNTT user { get; private set; } = null!;
 
     public DeviceNTT device { get; private set; } = null!;
+
+    public SessionNTT(int userId, int deviceId, string tokenHash, DateTime createdAt, DateTime lastActivityAt, DateTime expiresAt, DateTime? revokedAt)
+    {
+        this.userId = userId;
+        this.deviceId = deviceId;
+        this.tokenHash = tokenHash;
+        this.createdAt = createdAt;
+        this.lastActivityAt = lastActivityAt;
+        this.expiresAt = expiresAt;
+        this.revokedAt = revokedAt;
+    }
 }
