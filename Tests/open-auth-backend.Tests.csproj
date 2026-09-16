@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <RootNamespace>open_auth_backend_Tests</RootNamespace>
+    <RootNamespace>open_auth_backend.Tests</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
@@ -18,5 +18,7 @@
   <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
+
+  <ProjectReference Include="..\open-auth-backend.csproj" />
 
 </Project>

@@ -21,6 +21,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.24.1-preview.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+
+	<!-- togliamo i file di test dalla compilazione  -->
+	<Compile Remove="Tests\**" />
   </ItemGroup>
 
 </Project>
