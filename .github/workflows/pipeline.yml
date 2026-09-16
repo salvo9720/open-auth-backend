@@ -28,14 +28,14 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
-      - name: Restore pacakge
+      - name: Restore pacakge dotnet 
         run: dotnet restore
+
+      - name: Restore tests
+        run: dotnet restore Tests/open-auth-backend.Tests.csproj
 
       - name: Build
         run: dotnet build --no-restore --configuration Release
 
-      - name: Restore pacakge test project
-        run: cd .\Tests\ && dotnet restore
-
       - name: Test
-        run: dotnet test --no-build --configuration Release
+        run: dotnet test Tests/open-auth-backend.Tests.csproj --no-restore --configuration Release
