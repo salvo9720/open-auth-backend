@@ -24,8 +24,9 @@
   </ItemGroup>
 
     <!-- Esclude i test dalla compilazione del backend -->
-  	<ItemGroup>
+	<ItemGroup>
 		<Compile Remove="Tests\**" />
+		<None Include="Tests\**" />
 	</ItemGroup>
 
 </Project>
