@@ -35,7 +35,7 @@ jobs:
         run: dotnet build --no-restore --configuration Release
 
       - name: Restore pacakge test project
-        run: cd tests && dotnet restore
+        run: cd .\Tests\ && dotnet restore
 
       - name: Test
         run: dotnet test --no-build --configuration Release
