@@ -19,6 +19,8 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
-  <ProjectReference Include="..\open-auth-backend.csproj" />
+  <ItemGroup>
+    <ProjectReference Include="..\open-auth-backend.csproj" />
+  </ItemGroup>
 
 </Project>
