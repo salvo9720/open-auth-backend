@@ -24,7 +24,8 @@
         "ASPNETCORE_HTTP_PORTS": "8080"
       },
       "useSSL": true,
-      "httpPort": 8080
+      "httpPort": 8080,
+	  "containerRunArguments": "--network open-auth-network"
     }
   },
   "$schema": "https://json.schemastore.org/launchsettings.json"

@@ -4,10 +4,15 @@ services:
     image: postgres:16
     container_name: postgres16
 
+
+
     environment:
       POSTGRES_DB: open-auth-db
       POSTGRES_USER: open-auth-user
       POSTGRES_PASSWORD: open-auth-psw
+
+    networks:
+      - open-auth-network
 
     ports:
       - "5432:5432"
@@ -17,3 +22,7 @@ services:
 
 volumes:
   postgres_data:
+
+networks:
+  open-auth-network:
+    driver: bridge
