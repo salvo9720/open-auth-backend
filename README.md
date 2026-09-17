@@ -83,3 +83,11 @@ USER_DOMAINS
 │ id             │
 │ level          │
 └────────────────┘
+
+
+--------------------------------------------------
+
+
+user for default auth: admin admin.
+presnet in method  protected void seedDatabase(ModelBuilder modelBuilder), 
+for remove it, delete init data for database with method seedDatabase.

@@ -33,6 +33,7 @@ public class AppDbContext : DbContext
 
     protected void seedDatabase(ModelBuilder modelBuilder)
     {
+        // user default auth: admin admin
         modelBuilder.Entity<DomainNTT>().HasData(
             new
             {
