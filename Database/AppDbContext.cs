@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using open_auth_backend.Database.NTT;
+using System.Reflection.Emit;
 
 namespace open_auth_backend.Database.AppDbContext;
 
@@ -27,83 +28,56 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        this.seedDatabase(modelBuilder);
+    }
 
-        // User
-        modelBuilder.Entity<UserNTT>()
-            .HasKey(x => x.id);
-
-        modelBuilder.Entity<UserNTT>()
-            .HasIndex(x => x.username)
-            .IsUnique();
-
-        modelBuilder.Entity<UserNTT>()
-            .HasIndex(x => x.email)
-            .IsUnique();
-
-        modelBuilder.Entity<UserNTT>()
-            .HasIndex(x => x.email)
-            .IsUnique();
-
-        // Domain
-        modelBuilder.Entity<DomainNTT>()
-            .HasKey(x => x.id);
-
-        modelBuilder.Entity<DomainNTT>()
-            .HasIndex(x => x.name)
-            .IsUnique();
-
-        // Permission
-        modelBuilder.Entity<PermissionNTT>()
-            .HasKey(x => x.id);
-
-        // UserDomain
-        modelBuilder.Entity<UserDomainNTT>()
-            .HasKey(x => new
+    protected void seedDatabase(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<DomainNTT>().HasData(
+            new
             {
-                x.userId,
-                x.domainId
-            });
+                id = 1,
+                name = "dominioTest"
+            }
+        );
 
-        modelBuilder.Entity<UserDomainNTT>()
-            .HasOne(x => x.user)
-            .WithMany(x => x.userDomains)
-            .HasForeignKey(x => x.userId);
+        modelBuilder.Entity<PermissionNTT>().HasData(
+            new
+            {
+                id = 1,
+                level = 0
+            }
+        );
 
-        modelBuilder.Entity<UserDomainNTT>()
-            .HasOne(x => x.domain)
-            .WithMany(x => x.userDomains)
-            .HasForeignKey(x => x.domainId);
+        modelBuilder.Entity<UserNTT>().HasData(
+            new
+            {
+                id = 3,
+                username = "admin",
+                email = "admin",
+                passwordHash = "$2a$11$KudszP34FzcMNZLggar73eOS.KqfkvqzKjho.F4MsFN0LoG.xuTTi",
+                createdAt = new DateTime(
+                    2026,
+                    9,
+                    16,
+                    12,
+                    55,
+                    31,
+                    670,
+                    DateTimeKind.Utc
+                ),
+                deletedAt = (DateTime?)null
+            }
+        );
 
-        modelBuilder.Entity<UserDomainNTT>()
-            .HasOne(x => x.permission)
-            .WithMany(x => x.userDomains)
-            .HasForeignKey(x => x.permissionId);
-
-        // Device
-        modelBuilder.Entity<DeviceNTT>()
-            .HasKey(x => x.id);
-
-        modelBuilder.Entity<DeviceNTT>()
-            .HasMany(x => x.user)
-            .WithMany(x => x.devices)
-            .UsingEntity(x => x.ToTable("user_devices"));
-
-        // Session
-        modelBuilder.Entity<SessionNTT>()
-            .HasKey(x => x.id);
-
-        modelBuilder.Entity<SessionNTT>()
-            .HasOne(x => x.user)
-            .WithMany(x => x.sessions)
-            .HasForeignKey(x => x.userId);
-
-        modelBuilder.Entity<SessionNTT>()
-            .HasOne(x => x.device)
-            .WithMany(x => x.sessions)
-            .HasForeignKey(x => x.deviceId);
-
-        modelBuilder.Entity<SessionNTT>()
-            .HasIndex(x => x.tokenHash)
-            .IsUnique();
+        modelBuilder.Entity<UserDomainNTT>().HasData(
+            new
+            {
+                id = 3,
+                userId = 3,
+                domainId = 1,
+                permissionId = 1
+            }
+        );
     }
 }

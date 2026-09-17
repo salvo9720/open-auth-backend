@@ -1,12 +1,17 @@
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace open_auth_backend.Database.NTT;
 
 public class DeviceNTT
 {
+    [Key]
     public int id { get; private set; }
 
+    [MinLength(10)]
+    [MaxLength(100)]
     public string? name { get; private set; } = null;
 
     public string userAgent { get; private set; } = null!;
@@ -17,6 +22,8 @@ public class DeviceNTT
 
     public DateTime? deletedAt { get; private set; }
 
+
+    [ForeignKey(nameof(userId))]
     public ICollection<UserNTT> user { get; private set; } = new List<UserNTT>();
 
     public ICollection<SessionNTT> sessions { get; private set; } = new List<SessionNTT>();

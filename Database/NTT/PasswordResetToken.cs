@@ -1,7 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace open_auth_backend.Database.NTT;
 
 public class PasswordResetTokenNTT
 {
+    [Key]
     public int id { get; private set; }
 
     public int userId { get; private set; }
@@ -14,6 +18,7 @@ public class PasswordResetTokenNTT
 
     public DateTime? usedAt { get; private set; }
 
+    [ForeignKey(nameof(userId))]
     public UserNTT user { get; private set; } = null!;
 
     public PasswordResetTokenNTT(

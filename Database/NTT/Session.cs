@@ -1,9 +1,16 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace open_auth_backend.Database.NTT;
 
+[Index(nameof(tokenHash), IsUnique = true)]
+
 public class SessionNTT
 {
+    [Key]
     public int id { get; private set; }
 
     public int userId { get; private set; }
@@ -21,8 +28,10 @@ public class SessionNTT
 
     public DateTime? revokedAt { get; private set; }
 
+    [ForeignKey(nameof(userId))]
     public UserNTT user { get; private set; } = null!;
 
+    [ForeignKey(nameof(deviceId))]
     public DeviceNTT device { get; private set; } = null!;
 
     public SessionNTT(int userId, int deviceId, string tokenHash, DateTime createdAt, DateTime lastActivityAt, DateTime expiresAt, DateTime? revokedAt)
