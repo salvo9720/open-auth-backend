@@ -26,11 +26,11 @@ namespace open_auth_backend.Controllers
             _passwordResetService = passwordResetService;
         }
 
-		[HttpPost("login", Name = "login")]
+		[HttpPost("auth", Name = "auth")]
 		public async Task<IActionResult> userAuth([FromBody] LoginRequestDTO request)
 		{
             UserNTT? userNtt = await _authService.getUserByEmailOrUsernameAndPassword(
-				request.Username,
+				request.emailOrUsername,
 				request.Password);
 
             if (userNtt is null)
@@ -108,5 +108,11 @@ namespace open_auth_backend.Controllers
 		{
 			return "risposta da default del controller, verifica il path di chiamata";
 		}
-	}
+
+        [HttpGet("{defaultRespone}", Name = "GetDefaultResponseIfMethodNotExist")]
+        public string GetDefaultResponseIfMethodNotExist()
+        {
+            return "risposta da default del controller, verifica il path di chiamata";
+        }
+    }
 }

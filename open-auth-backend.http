@@ -1,22 +1,31 @@
 @open_auth_backend_HostAddress_http = http://localhost:8080
 @open_auth_backend_HostAddress_https = https://localhost:8081
 
-GET {{open_auth_backend_HostAddress_http}}/weatherforecast
+GET {{open_auth_backend_HostAddress_http}}/login
 Accept: application/json
 
 ###
 
-GET {{open_auth_backend_HostAddress_http}}/weatherforecast/GetWeatherForecast
+
+GET {{open_auth_backend_HostAddress_https}}/login
 Accept: application/json
 
 ###
 
-GET {{open_auth_backend_HostAddress_https}}/weatherforecast
+
+GET {{open_auth_backend_HostAddress_https}}/login/DefaultLogin
 Accept: application/json
 
 ###
 
-GET {{open_auth_backend_HostAddress_https}}/weatherforecast/GetWeatherForecast
+
+POST {{open_auth_backend_HostAddress_https}}/login/auth
 Accept: application/json
+Content-Type: application/json
+
+{
+	"emailOrUsername": "admin",
+	"password": "admin"
+}
 
 ###
