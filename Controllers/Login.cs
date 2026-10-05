@@ -16,13 +16,15 @@ namespace open_auth_backend.Controllers
 		private readonly ILogger<LoginController> _logger;
 		private readonly AuthService _authService;
 		private readonly UserMapper _userMapper;
-		private readonly PasswordResetService _passwordResetService;
+		private readonly DeviceMapper _deviceMapper;
+        private readonly PasswordResetService _passwordResetService;
 
-        public LoginController(ILogger<LoginController> logger, AuthService authService,UserMapper userMapper, PasswordResetService passwordResetService)
+        public LoginController(ILogger<LoginController> logger, AuthService authService,UserMapper userMapper, DeviceMapper deviceMapper, PasswordResetService passwordResetService)
 		{
 			_logger = logger;
 			_authService = authService;
 			_userMapper = userMapper;
+            _deviceMapper = deviceMapper;
             _passwordResetService = passwordResetService;
         }
 
@@ -45,10 +47,13 @@ namespace open_auth_backend.Controllers
                 return BadRequest("userAgent missing");
             }
 
-            DeviceNTT deviceNtt = await _authService.saveDevice(userAgent, userNtt.id);
-            SessionNTT sessionNtt = await _authService.saveSession(userNtt.id, deviceNtt.id, userAgent);
+            DeviceNTT newDeviceNtt = await _authService.saveDevice(userAgent, userNtt.id);
+            List<DeviceNTT> deviceNtt = await _authService.getAllDevicesForUser(userNtt.id);
+            List<DeviceDTO> deviceDto = _deviceMapper.fromUserNttToLoginResponseDto(deviceNtt);
 
-            LoginResponseDTO loginResponseDto = _userMapper.fromUserNttToLoginResponseDto(userNtt);
+            SessionNTT sessionNtt = await _authService.saveSession(userNtt.id, newDeviceNtt.id, userAgent);
+
+            LoginResponseDTO loginResponseDto = _userMapper.fromUserNttToLoginResponseDto(userNtt, deviceDto);
 
             return Ok(loginResponseDto);
 

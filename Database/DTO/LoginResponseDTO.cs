@@ -8,7 +8,7 @@ public class LoginResponseDTO
    
     public UserDTO userDto { get; set; } = null!;
 
-    public List<DeviceNTT> device { get; set; } =  null!;
+    public List<DeviceDTO> device { get; set; } =  null!;
 
     public int permission { get; set; }
 
@@ -16,7 +16,7 @@ public class LoginResponseDTO
 
     public List<string> userDomain { get; set; } =  null!;
 
-    public LoginResponseDTO(UserDTO userDto, List<DeviceNTT> device, int permission, List<SessionDTO> sessionDto, List<string> userDomain)
+    public LoginResponseDTO(UserDTO userDto, List<DeviceDTO> device, int permission, List<SessionDTO> sessionDto, List<string> userDomain)
     {
         this.userDto = userDto;
         this.device = device;

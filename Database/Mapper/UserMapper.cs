@@ -9,7 +9,7 @@ namespace open_auth_backend.Database.Mapper
     {
 
         
-        public LoginResponseDTO fromUserNttToLoginResponseDto(UserNTT userNtt)
+        public LoginResponseDTO fromUserNttToLoginResponseDto(UserNTT userNtt, List<DeviceDTO> deviceNtt)
         {
             UserDTO userDTO = new UserDTO(userNtt);
 
@@ -21,7 +21,6 @@ namespace open_auth_backend.Database.Mapper
                 .Select(x => x.permission.level)
                 .FirstOrDefault();
 
-            List<DeviceNTT> devices = userNtt.devices.ToList();
             List<SessionDTO> sessionDto = new List<SessionDTO>();
 
             foreach (SessionNTT session in userNtt.sessions)
@@ -30,7 +29,9 @@ namespace open_auth_backend.Database.Mapper
                 sessionDto.Add(dto);
             }
 
-            return new LoginResponseDTO(userDTO, devices, permission, sessionDto, domains);
+            return new LoginResponseDTO(userDTO, deviceNtt, permission, sessionDto, domains);
+
+
         }
     }
 }

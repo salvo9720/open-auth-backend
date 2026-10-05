@@ -16,6 +16,7 @@ builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<PasswordResetService>();
 
 builder.Services.AddScoped<UserMapper>();
+builder.Services.AddScoped<DeviceMapper>();
 
 builder.Services.AddControllers();
 

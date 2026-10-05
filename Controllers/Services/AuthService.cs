@@ -73,6 +73,14 @@ public class AuthService
         return deviceNtt;
     }
 
+    public async Task<List<DeviceNTT>> getAllDevicesForUser(int userId)
+    {
+        List<DeviceNTT> deviceNtt = await _db.Devices
+            .Where(x => x.userId == userId)
+            .ToListAsync<DeviceNTT>();
+        return deviceNtt;
+    }
+
     public async Task<SessionNTT> saveSession(int userId, int deviceId,string userAgent)
     {
         string inputTokenHash = userAgent + DateTime.UtcNow.ToString();
