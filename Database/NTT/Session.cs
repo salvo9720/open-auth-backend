@@ -17,7 +17,6 @@ public class SessionNTT
 
     public int deviceId { get; private set; }
 
-    [JsonIgnore]
     public string tokenHash { get; private set; } = null!;
 
     public DateTime createdAt { get; private set; }

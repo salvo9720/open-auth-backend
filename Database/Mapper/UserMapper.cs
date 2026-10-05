@@ -23,10 +23,17 @@ namespace open_auth_backend.Database.Mapper
 
             List<SessionDTO> sessionDto = new List<SessionDTO>();
 
+            int index = 0;
             foreach (SessionNTT session in userNtt.sessions)
             {
                 SessionDTO dto = new SessionDTO(session);
+                if (index != (userNtt.sessions.Count - 1))
+                {
+                    dto.removeTokenHash();
+                }
+               
                 sessionDto.Add(dto);
+                index++;
             }
 
             return new LoginResponseDTO(userDTO, deviceNtt, permission, sessionDto, domains);
