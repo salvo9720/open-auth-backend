@@ -91,3 +91,16 @@ USER_DOMAINS
 user for default auth: admin admin.
 presnet in method  protected void seedDatabase(ModelBuilder modelBuilder), 
 for remove it, delete init data for database with method seedDatabase.
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+pezzi da integrare
+1) login FE
+2) verifica del token 
+3) uso del token da FE con la check su ricordami 
+4) da integrare refresh token
+5) recupero password da FE 
+6) creare una funzione che validi il token e dica che siamo loggati, deve essere una funziona richiamabibile da altri bk
