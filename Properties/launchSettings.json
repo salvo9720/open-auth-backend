@@ -25,7 +25,7 @@
       },
       "useSSL": true,
       "httpPort": 8080,
-	  "containerRunArguments": "--network open-auth-network"
+	  "containerRunArguments": "--network open-auth-backend_open-auth-network"
     }
   },
   "$schema": "https://json.schemastore.org/launchsettings.json"

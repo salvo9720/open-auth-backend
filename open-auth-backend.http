@@ -22,6 +22,7 @@ Accept: application/json
 POST {{open_auth_backend_HostAddress_https}}/login/auth
 Accept: application/json
 Content-Type: application/json
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/154.0.0.0
 
 {
 	"emailOrUsername": "admin",
