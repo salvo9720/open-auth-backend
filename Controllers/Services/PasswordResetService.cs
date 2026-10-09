@@ -19,7 +19,7 @@ public class PasswordResetService
         _emailService = emailService;
     }
 
-    public async Task<Boolean> getUserByEmailOrUsername(UserNTT userNtt)
+    public async Task<Boolean> getUserByEmailOrUsername(UserNTT userNtt, Boolean isDevMode, ILogger logger)
     {
         string code = RandomNumberGenerator
             .GetInt32(100000, 1000000)
@@ -31,6 +31,7 @@ public class PasswordResetService
                 0,
                 userNtt.id,
                 tokenHash,
+                code,
                 DateTime.UtcNow,
                 DateTime.UtcNow.AddMinutes(10),
                 null
@@ -43,18 +44,20 @@ public class PasswordResetService
 
         return await _emailService.sendEmailPasswordResetWithCode(
             userNtt.email,
-            code
+            code,
+            isDevMode,
+            logger
         );
 
     }
 
     public async Task<UserNTT?> getUserByCode(string code)
     {
-        string tokenHash = BCrypt.Net.BCrypt.HashPassword(code);
+        //string tokenHash = BCrypt.Net.BCrypt.HashPassword(code);
 
         PasswordResetTokenNTT? passwordResetTokenNTT = await this._db.PasswordResetTokens
             .Include(x=> x.user)
-            .FirstOrDefaultAsync(x => x.tokenHash == tokenHash);
+            .FirstOrDefaultAsync(x => x.code == code);
 
         if (passwordResetTokenNTT is null)
         {

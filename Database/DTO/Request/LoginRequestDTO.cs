@@ -1,4 +1,4 @@
-﻿namespace open_auth_backend.DTO;
+﻿namespace open_auth_backend.database.DTO.Request;
 
 public class LoginRequestDTO
 {

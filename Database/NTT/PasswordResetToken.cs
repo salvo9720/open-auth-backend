@@ -11,6 +11,7 @@ public class PasswordResetTokenNTT
     public int userId { get; private set; }
 
     public string tokenHash { get; private set; } = null!;
+    public string code { get; private set; } = null!;
 
     public DateTime createdAt { get; private set; }
 
@@ -43,6 +44,7 @@ public class PasswordResetTokenNTT
     int id,
     int userId,
     string tokenHash,
+    string code,
     DateTime createdAt,
     DateTime expiresAt,
     DateTime? usedAt)
@@ -50,6 +52,7 @@ public class PasswordResetTokenNTT
         this.id = id;
         this.userId = userId;
         this.tokenHash = tokenHash;
+        this.code = code;
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
         this.usedAt = usedAt;

@@ -6,6 +6,7 @@ using open_auth_backend.Database.NTT;
 using open_auth_backend.Database.DTO;
 using open_auth_backend.Database.Mapper;
 using Microsoft.AspNetCore.Http.HttpResults;
+using open_auth_backend.database.DTO.Request;
 
 namespace open_auth_backend.Controllers
 {
@@ -19,16 +20,20 @@ namespace open_auth_backend.Controllers
 		private readonly DeviceMapper _deviceMapper;
         private readonly PasswordResetService _passwordResetService;
 
-        public LoginController(ILogger<LoginController> logger, AuthService authService,UserMapper userMapper, DeviceMapper deviceMapper, PasswordResetService passwordResetService)
+        private readonly IConfiguration _configuration;
+
+        public LoginController(ILogger<LoginController> logger, AuthService authService,UserMapper userMapper, DeviceMapper deviceMapper, PasswordResetService passwordResetService, IConfiguration configuration)
 		{
 			_logger = logger;
 			_authService = authService;
 			_userMapper = userMapper;
             _deviceMapper = deviceMapper;
             _passwordResetService = passwordResetService;
+            _configuration = configuration;
+
         }
 
-		[HttpPost("auth", Name = "auth")]
+        [HttpPost("auth", Name = "auth")]
 		public async Task<IActionResult> userAuth([FromBody] LoginRequestDTO request)
 		{
             UserNTT? userNtt = await _authService.getUserByEmailOrUsernameAndPassword(
@@ -60,47 +65,50 @@ namespace open_auth_backend.Controllers
         }
 
 		[HttpPost("forgotPassword", Name = "forgotPassword")]
-		public async Task<IActionResult> forgotPasswordAndSendEmail([FromBody] string emailOrUsername)
+		public async Task<IActionResult> forgotPasswordAndSendEmail([FromBody] ForgotPasswordRequestDTO forgotPasswordDto)
 		{
-            UserNTT? userData = await _authService.getUserByEmailOrUsername(emailOrUsername);
+            UserNTT? userData = await _authService.getUserByEmailOrUsername(forgotPasswordDto.emailOrUsername);
 			if (userData is null)
 			{
-                _logger.LogError("emailOrUsername: {EmailOrUsername}", emailOrUsername);
+                _logger.LogError("emailOrUsername: {EmailOrUsername}", forgotPasswordDto.emailOrUsername);
                 return NotFound("utente non trovato");
                 
 			}
-            Boolean resultResetEmail = await _passwordResetService.getUserByEmailOrUsername(userData);
+            Boolean isDevMode = _configuration.GetValue<Boolean>("isDevMode");
+            Boolean resultResetEmail = await _passwordResetService.getUserByEmailOrUsername(userData, isDevMode, _logger);
 
             return Ok("segui i passaggi che ti sono stati inviati nell'indirizzo email");
         }
 
         [HttpPost("forgotPasswordVerifyCode", Name = "forgotPasswordVerifyCode")]
-        public async Task<IActionResult> forgotPasswordVerifyCodeAndChangePassword([FromBody] string code, string password)
+        public async Task<IActionResult> forgotPasswordVerifyCodeAndChangePassword([FromBody] ForgotPasswordVerifyCodeRequestDTO forgotPasswordVerifyCodeRequestDto)
         {
 
-            UserNTT? userNtt = await _passwordResetService.getUserByCode(code);
+            UserNTT? userNtt = await _passwordResetService.getUserByCode(forgotPasswordVerifyCodeRequestDto.code);
             if (userNtt is null)
             {
-                _logger.LogError("utente non trovato con code: {code}", code);
+                _logger.LogError("utente non trovato con code: {code}", forgotPasswordVerifyCodeRequestDto.code);
                 return NotFound("utente non trovato");
             }
-            Boolean resultResetEmail = await _passwordResetService.getUserByEmailOrUsername(userNtt);
+            string oldPasswrod = userNtt.passwordHash;
+            Boolean isDevMode = _configuration.GetValue<Boolean>("isDevMode");
+            Boolean resultResetEmail = await _passwordResetService.getUserByEmailOrUsername(userNtt, isDevMode, _logger);
 
             if (resultResetEmail is false)
             {
-                _logger.LogError("utente per update non trovato con code: {code}", code);
+                _logger.LogError("utente per update non trovato con code: {code}", forgotPasswordVerifyCodeRequestDto.code);
                 return NotFound("utente per update non trovato");
             }
 
-            UserNTT? updatedUserNtt = await _passwordResetService.changeUserPasswordHash(code,userNtt);
+            UserNTT? updatedUserNtt = await _passwordResetService.changeUserPasswordHash(forgotPasswordVerifyCodeRequestDto.code,userNtt);
 
             if (updatedUserNtt is null)
             {
-                _logger.LogError("utente per update non trovato con code: {code}", code);
+                _logger.LogError("utente per update non trovato con code: {code}", forgotPasswordVerifyCodeRequestDto.code);
                 return NotFound("utente per update non trovato");
             }
 
-            if (updatedUserNtt.passwordHash != userNtt.passwordHash)
+            if (updatedUserNtt.passwordHash != oldPasswrod)
             {
                 return Ok("modifica passowrd avvenuta con successo");
             }

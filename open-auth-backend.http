@@ -30,3 +30,26 @@ User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/154.0.0.0
 }
 
 ###
+
+POST {{open_auth_backend_HostAddress_https}}/login/forgotPassword
+Accept: application/json
+Content-Type: application/json
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/154.0.0.0
+
+{
+	"emailOrUsername": "admin"
+}
+
+###
+
+POST {{open_auth_backend_HostAddress_https}}/login/forgotPasswordVerifyCode
+Accept: application/json
+Content-Type: application/json
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/154.0.0.0
+
+{
+	"code": "417923",
+	"password": "admin"
+}
+
+###

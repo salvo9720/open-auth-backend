@@ -18,18 +18,22 @@ public class EmailService
     }
 
     public async Task<Boolean> sendEmailPasswordResetWithCode(
-    string email, string code)
+    string email, string code, Boolean isDevMode, ILogger logger)
     {
-        var message = new MimeMessage();
-        message.From.Add(new MailboxAddress("OpenAuth", email)); 
-        message.To.Add(MailboxAddress.Parse(email)); 
-        message.Subject = "Codice recupero password"; 
-        message.Body = new TextPart("plain") { Text = $"Il tuo codice per recuperare la password è: {code}" };
-        using var smtp = new MailKit.Net.Smtp.SmtpClient();
-        await smtp.ConnectAsync("smtp.example.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-        await smtp.AuthenticateAsync(email, code); 
-        await smtp.SendAsync(message); 
-        await smtp.DisconnectAsync(true);
+        if (!isDevMode)
+        {
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("OpenAuth", email));
+            message.To.Add(MailboxAddress.Parse(email));
+            message.Subject = "Codice recupero password";
+            message.Body = new TextPart("plain") { Text = $"Il tuo codice per recuperare la password è: {code}" };
+            using var smtp = new MailKit.Net.Smtp.SmtpClient();
+            await smtp.ConnectAsync("smtp.example.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
+            await smtp.AuthenticateAsync(email, code);
+            await smtp.SendAsync(message);
+            await smtp.DisconnectAsync(true);
+        }
+        logger.LogInformation("email mandata se isDevMode è disattivato");
 
         return true;
     }
