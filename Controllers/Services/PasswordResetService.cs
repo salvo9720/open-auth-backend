@@ -53,11 +53,9 @@ public class PasswordResetService
 
     public async Task<UserNTT?> getUserByCode(string code)
     {
-        //string tokenHash = BCrypt.Net.BCrypt.HashPassword(code);
-
         PasswordResetTokenNTT? passwordResetTokenNTT = await this._db.PasswordResetTokens
             .Include(x=> x.user)
-            .FirstOrDefaultAsync(x => x.code == code);
+            .FirstOrDefaultAsync(x => x.code == code && x.expiresAt >= DateTime.UtcNow);
 
         if (passwordResetTokenNTT is null)
         {

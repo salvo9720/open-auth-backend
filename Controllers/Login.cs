@@ -87,8 +87,8 @@ namespace open_auth_backend.Controllers
             UserNTT? userNtt = await _passwordResetService.getUserByCode(forgotPasswordVerifyCodeRequestDto.code);
             if (userNtt is null)
             {
-                _logger.LogError("utente non trovato con code: {code}", forgotPasswordVerifyCodeRequestDto.code);
-                return NotFound("utente non trovato");
+                _logger.LogError("utente non trovato con code: {code} , verifica che il codice sia ancora valido", forgotPasswordVerifyCodeRequestDto.code);
+                return NotFound("utente non trovato, verifica che il codice sia ancora valido");
             }
             string oldPasswrod = userNtt.passwordHash;
             Boolean isDevMode = _configuration.GetValue<Boolean>("isDevMode");
